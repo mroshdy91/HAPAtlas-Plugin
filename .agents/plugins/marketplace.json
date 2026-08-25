@@ -1,0 +1,20 @@
+{
+  "name": "hapatlas-marketplace",
+  "interface": {
+    "displayName": "HAPAtlas"
+  },
+  "plugins": [
+    {
+      "name": "hapatlas",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

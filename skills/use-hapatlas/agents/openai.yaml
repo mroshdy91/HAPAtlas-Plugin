@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use HAPAtlas"
+  short_description: "Build and manage professional Carrier HAP models"
+  default_prompt: "Use $use-hapatlas to inspect my open HAP project and guide the next safe workflow."

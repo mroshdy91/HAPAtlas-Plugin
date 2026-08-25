@@ -1,0 +1,18 @@
+# HAPAtlas runtime and build outputs do not belong in the plugin repository.
+bin/
+obj/
+target/
+artifacts/
+runtime/
+*.exe
+*.dll
+*.msi
+*.msix
+*.nupkg
+*.zip
+
+# Carrier projects, working sets, reports, and support packages must not be redistributed.
+*.e3a
+*.mdb
+*.dat
+*.hapatlasdiag

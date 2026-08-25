@@ -1,0 +1,21 @@
+{
+  "name": "hapatlas",
+  "version": "1.0.0-alpha.1",
+  "description": "Workflow-gated HAPAtlas Alpha v1 control for explicitly selected Carrier HAP projects.",
+  "author": {
+    "name": "HAPAtlas",
+    "url": "https://github.com/mroshdy91/HAPAtlas-Plugin"
+  },
+  "homepage": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+  "repository": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+  "license": "Proprietary",
+  "keywords": [
+    "carrier-hap",
+    "hvac",
+    "load-calculation",
+    "building-model",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

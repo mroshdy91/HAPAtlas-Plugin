@@ -1,0 +1,19 @@
+{
+  "name": "hapatlas-marketplace",
+  "owner": {
+    "name": "HAPAtlas",
+    "url": "https://github.com/mroshdy91/HAPAtlas-Plugin"
+  },
+  "metadata": {
+    "description": "The official HAPAtlas plugin marketplace.",
+    "version": "1.0.0-alpha.1"
+  },
+  "plugins": [
+    {
+      "name": "hapatlas",
+      "source": "./",
+      "description": "Workflow-gated HAPAtlas Alpha v1 control for explicitly selected Carrier HAP projects.",
+      "version": "1.0.0-alpha.1"
+    }
+  ]
+}

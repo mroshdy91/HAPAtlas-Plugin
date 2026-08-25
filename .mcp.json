@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "HAPAtlas": {
+      "type": "stdio",
+      "command": "hapatlas",
+      "args": []
+    }
+  }
+}

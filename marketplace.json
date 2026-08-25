@@ -1,0 +1,20 @@
+{
+  "name": "hapatlas-marketplace",
+  "description": "The official HAPAtlas plugin marketplace.",
+  "plugins": [
+    {
+      "name": "hapatlas",
+      "version": "1.0.0-alpha.1",
+      "description": "Workflow-gated HAPAtlas Alpha v1 control for explicitly selected Carrier HAP projects.",
+      "category": "engineering",
+      "tags": [
+        "carrier-hap",
+        "hvac",
+        "mcp"
+      ],
+      "source": ".",
+      "homepage": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+      "repository": "https://github.com/mroshdy91/HAPAtlas-Plugin"
+    }
+  ]
+}
