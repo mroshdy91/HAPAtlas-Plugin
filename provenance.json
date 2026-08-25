@@ -1,10 +1,42 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "product": "HAPAtlas",
   "product_version": "1.0.0-alpha.1",
-  "source_repository": "https://github.com/mroshdy91/HAPAtlas",
-  "source_tag": "v1.0.0-alpha.1",
-  "source_commit": "22d1e4263d814ba3bebcbfff3a9a8a3cc1b48c98",
-  "distribution_repository": "https://github.com/mroshdy91/HAPAtlas-Plugin",
-  "runtime_delivery": "external-prerequisite"
+  "plugin_version": "1.0.0-alpha.1-private.1",
+  "plugin_repository": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+  "universal_skill": {
+    "handoff_source_repository": "https://github.com/mroshdy91/HAPAtlas",
+    "handoff_source_commit": "5a48e0f52f48f3bf3e4667a1ec5ee776b32fd563",
+    "handoff_source_path": "plugins/hapatlas/skills/use-hapatlas"
+  },
+  "capability_guidance": {
+    "source_repository": "https://github.com/mroshdy91/HAPAtlas",
+    "source_branch": "codex/client-neutral-evaluation",
+    "source_commit": "87d1656cc18e22263c1e2599a3969cf866014d43",
+    "generated_inventory": "evals/client-neutral/generated-tool-inventory.json",
+    "runtime_contracts": [
+      "space-workflow-v1",
+      "adapter-capabilities",
+      "input-coverage"
+    ],
+    "accepted_actions": [
+      "hapatlas_spaces_manage:general.create",
+      "hapatlas_spaces_manage:general.edit-existing"
+    ]
+  },
+  "runtime": {
+    "delivery": "private-external-prerequisite",
+    "distribution_profile": "public-runtime",
+    "unsigned": true,
+    "command": "hapatlas",
+    "args": [],
+    "release_url": "https://github.com/mroshdy91/HAPAtlas/releases/tag/v1.0.0-alpha.1-private.1",
+    "release_tag": "v1.0.0-alpha.1-private.1",
+    "source_commit": "5a48e0f52f48f3bf3e4667a1ec5ee776b32fd563",
+    "development_main_at_handoff": "8d2a24763efb2156b257d147fcb9719daaf9692d",
+    "package_implementation": "1.0.0-alpha.1+pkg.4101efa4e717e9bec65e41ac",
+    "zip_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip",
+    "zip_sha256": "00f22c0daaa46513f4a3a1b39ccae80193c946dbabab1e923b18377075c75dca",
+    "inventory_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip.inventory.json"
+  }
 }

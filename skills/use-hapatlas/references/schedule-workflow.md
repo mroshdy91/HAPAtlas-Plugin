@@ -16,4 +16,4 @@ Actions:
 
 Fractions are always decimal `0.0–1.0`, never HAP's internal percentages. HAPAtlas hides native thermostat sentinels and profile-slot IDs. HAP 5.1 thermostat temperatures belong to the referencing System/zone workflow; its Schedule retains occupied state. HAP 6.3 thermostat profile temperatures use the declared IP/SI units.
 
-Do not route Schedule mutation through Space Inputs, do not submit a whole ProjectSpec, and do not create an external JSON/model file. Duplicate, delete, and Utility Rate Time-of-Day are not advertised until their exact-build live gates pass. Only the user saves HAP.
+Do not route Schedule mutation through Spaces, Space Types, or the retired shared Space Inputs alias; do not submit a whole ProjectSpec or create an external JSON/model file. Duplicate, delete, and Utility Rate Time-of-Day are not advertised until their exact-build live gates pass. Only the user saves HAP.

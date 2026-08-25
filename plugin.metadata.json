@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.1",
+  "name": "hapatlas",
+  "product_name": "HAPAtlas",
+  "product_version": "1.0.0-alpha.1",
+  "plugin_version": "1.0.0-alpha.1-private.1",
+  "description": "Workflow-gated HAPAtlas private Alpha control for explicitly selected Carrier HAP projects.",
+  "author": {
+    "name": "HAPAtlas",
+    "url": "https://github.com/mroshdy91/HAPAtlas-Plugin"
+  },
+  "homepage": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+  "repository": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+  "license": "Proprietary",
+  "category": "Productivity",
+  "keywords": [
+    "carrier-hap",
+    "hvac",
+    "load-calculation",
+    "building-model",
+    "mcp"
+  ],
+  "interface": {
+    "display_name": "HAPAtlas",
+    "short_description": "Build professional Carrier HAP models with agents.",
+    "long_description": "HAPAtlas combines a guarded local MCP server with one universal workflow skill. It helps agents reuse HAP libraries, build and edit HVAC design inputs, invoke native HAP sizing, audit projects, and export supported reports while leaving Save under user control.",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "default_prompt": [
+      "Inspect my open HAP projects and explain what is ready.",
+      "Build this HVAC model using HAP libraries first.",
+      "Audit, calculate, and export my current HAP project."
+    ],
+    "brand_color": "#1F5A78"
+  },
+  "runtime": {
+    "required": true,
+    "delivery": "private-external-prerequisite",
+    "distribution_profile": "public-runtime",
+    "unsigned": true,
+    "command": "hapatlas",
+    "args": [],
+    "release": {
+      "repository": "https://github.com/mroshdy91/HAPAtlas",
+      "tag": "v1.0.0-alpha.1-private.1",
+      "url": "https://github.com/mroshdy91/HAPAtlas/releases/tag/v1.0.0-alpha.1-private.1",
+      "source_commit": "5a48e0f52f48f3bf3e4667a1ec5ee776b32fd563",
+      "development_main_at_handoff": "8d2a24763efb2156b257d147fcb9719daaf9692d",
+      "package_implementation": "1.0.0-alpha.1+pkg.4101efa4e717e9bec65e41ac",
+      "zip_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip",
+      "zip_sha256": "00f22c0daaa46513f4a3a1b39ccae80193c946dbabab1e923b18377075c75dca",
+      "inventory_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip.inventory.json"
+    }
+  },
+  "capability_guidance": {
+    "source_repository": "https://github.com/mroshdy91/HAPAtlas",
+    "source_branch": "codex/client-neutral-evaluation",
+    "source_commit": "87d1656cc18e22263c1e2599a3969cf866014d43",
+    "generated_inventory": "evals/client-neutral/generated-tool-inventory.json",
+    "runtime_contracts": [
+      "space-workflow-v1",
+      "adapter-capabilities",
+      "input-coverage"
+    ],
+    "accepted_actions": [
+      "hapatlas_spaces_manage:general.create",
+      "hapatlas_spaces_manage:general.edit-existing"
+    ]
+  },
+  "marketplaces": {
+    "product": {
+      "name": "hapatlas-marketplace",
+      "display_name": "HAPAtlas"
+    },
+    "umbrella": {
+      "name": "atlas-marketplace",
+      "display_name": "Atlas Marketplace"
+    }
+  }
+}

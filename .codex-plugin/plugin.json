@@ -1,7 +1,7 @@
 {
   "name": "hapatlas",
-  "version": "1.0.0-alpha.1",
-  "description": "Workflow-gated HAPAtlas Alpha v1 control for explicitly selected Carrier HAP projects.",
+  "version": "1.0.0-alpha.1-private.1",
+  "description": "Workflow-gated HAPAtlas private Alpha control for explicitly selected Carrier HAP projects.",
   "author": {
     "name": "HAPAtlas",
     "url": "https://github.com/mroshdy91/HAPAtlas-Plugin"
@@ -21,19 +21,21 @@
   "interface": {
     "displayName": "HAPAtlas",
     "shortDescription": "Build professional Carrier HAP models with agents.",
-    "longDescription": "HAPAtlas combines a guarded local MCP server with a universal workflow manual. It helps agents reuse HAP libraries, build and edit HVAC design inputs, invoke native HAP sizing, audit projects, and export supported reports while leaving Save under user control.",
+    "longDescription": "HAPAtlas combines a guarded local MCP server with one universal workflow skill. It helps agents reuse HAP libraries, build and edit HVAC design inputs, invoke native HAP sizing, audit projects, and export supported reports while leaving Save under user control.",
     "developerName": "HAPAtlas",
     "category": "Productivity",
     "capabilities": [
       "Interactive",
       "Write"
     ],
-    "websiteURL": "https://github.com/mroshdy91/HAPAtlas-Plugin",
     "defaultPrompt": [
       "Inspect my open HAP projects and explain what is ready.",
       "Build this HVAC model using HAP libraries first.",
       "Audit, calculate, and export my current HAP project."
     ],
+    "websiteURL": "https://github.com/mroshdy91/HAPAtlas-Plugin",
+    "privacyPolicyURL": "https://github.com/mroshdy91/HAPAtlas-Plugin#runtime-privacy",
+    "termsOfServiceURL": "https://github.com/mroshdy91/HAPAtlas-Plugin#alpha-use-terms",
     "brandColor": "#1F5A78"
   }
 }

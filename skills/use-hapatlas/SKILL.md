@@ -20,6 +20,7 @@ HAPAtlas is the engineer's guarded hand inside Carrier HAP. Follow the same work
 - If custom input is necessary, include a concise `engineering_basis` and optional `provenance` in the same tool call. An exact inspected `library_ref` satisfies this source gate instead. Never invent a number, enum, geometry, weather station, or equipment choice.
 - Every write is inline and domain-owned: immutable dry run, identical live request, mandatory native readback, then carry the returned revision. Never create an external model/spec file.
 - Never route around an unavailable action through another manager. Candidate, guarded, engineer-only and deferred actions are intentionally absent.
+- Never call the retired `hapatlas_space_inputs_manage`. HAP 5.1 direct Spaces, HAP 6.3 reusable Space Types, and HAP 6.3 Space Models are separate engineer-visible chapters.
 - Invoke Carrier-native sizing through Reports. Never replace HAP calculations or tune inputs just to force a desired answer.
 - Never invoke or simulate HAP Save. Report `pending_user_save` and ask the engineer to review and Save.
 - Stop all writes on `HAP_SESSION_TAINTED`; tell the engineer to close without saving and reopen.
@@ -42,8 +43,8 @@ Use only chapters/actions returned as Available for the selected adapter:
 4. Weather: inspect the visible Design Parameters, exact station selection, then explicit overrides.
 5. Libraries: list/verify trusted sources, search, inspect, compare.
 6. Project Libraries in sidebar order: Schedules, Walls, Roofs, Windows, Doors, Shades, then required Chillers/Boilers and version-correct heat-rejection definitions.
-7. Space inputs and version-correct nonvisual assignments.
-8. Space Model/zoning for HAP 6.3; direct Space/surface workflow for HAP 5.1.
+7. HAP 5.1 direct Spaces when their exact action is advertised; HAP 6.3 reusable Space Types only after their separate definition actions are promoted.
+8. Space Model/zoning for HAP 6.3; later direct Space tabs/surfaces for HAP 5.1 only through separately promoted actions.
 9. Systems and controls.
 10. Plants and exact System connections.
 11. HAP 6.3 Alternatives when applicable.
@@ -51,7 +52,7 @@ Use only chapters/actions returned as Available for the selected adapter:
 
 HAP 6.x visual floor-plan/3D work is engineer-only. Do not interpret PDF/image underlays, author visual geometry, or import/repair BIM/gbXML.
 
-Read [workflow-manual.md](references/workflow-manual.md) for the chapter sequence, [generated-tool-inventory.md](references/generated-tool-inventory.md) for the executable tool/action/path table, [tool-catalog.md](references/tool-catalog.md) for usage detail, [action-gates.md](references/action-gates.md) for dynamic gates, and [versions-and-capabilities.md](references/versions-and-capabilities.md) for exact adapter boundaries.
+Read [workflow-manual.md](references/workflow-manual.md) for the chapter sequence, [generated-tool-inventory.md](references/generated-tool-inventory.md) for the executable tool/action/path table, [tool-catalog.md](references/tool-catalog.md) for usage detail, [action-gates.md](references/action-gates.md) for dynamic gates, and [versions-and-capabilities.md](references/versions-and-capabilities.md) for exact adapter boundaries. Read [space-workflow.md](references/space-workflow.md) before creating/editing a HAP 5.1 Space or reasoning about HAP 6.3 Space Types.
 
 ## Library discipline
 
