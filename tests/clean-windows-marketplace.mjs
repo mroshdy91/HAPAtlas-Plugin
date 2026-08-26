@@ -168,7 +168,7 @@ try {
   assert.equal(init.serverInfo.name, 'HAPAtlas');
   raw.notify('notifications/initialized');
   assert.equal((await raw.request('tools/list')).tools.length, 21);
-  check('Raw inherited MCP stdio and offline restart');
+  check('Byte-stream MCP relay and offline restart');
 } finally { await raw.close(); }
 
 const cache = path.resolve(cacheRoot, pin.zip_sha256);

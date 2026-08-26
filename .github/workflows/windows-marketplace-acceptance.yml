@@ -16,6 +16,9 @@ jobs:
       - name: Validate bootstrap failure cases on Windows PowerShell 5.1
         shell: powershell
         run: .\tests\test-runtime-verification.ps1
+      - name: Validate raw MCP byte relay
+        shell: pwsh
+        run: node tests/test-stdio.mjs
       - name: Install pinned Codex client
         shell: pwsh
         run: |

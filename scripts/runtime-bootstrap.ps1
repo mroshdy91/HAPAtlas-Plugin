@@ -149,15 +149,11 @@ try {
     $lock.Dispose()
     $lock = $null
     if ($InstallOnly) { Write-BootstrapStatus 'Pinned runtime verified and ready.'; exit 0 }
-    # Inherit raw OS handles; never pipe MCP bytes through PowerShell's object pipeline.
-    $start = [Diagnostics.ProcessStartInfo]::new($runtimeExe)
-    $start.UseShellExecute = $false
-    $start.CreateNoWindow = $true
-    $start.WindowStyle = [Diagnostics.ProcessWindowStyle]::Hidden
-    $start.WorkingDirectory = Join-Path (Join-Path $installRoot 'versions') $pin.package_implementation
-    $start.Arguments = (@($RuntimeArguments | ForEach-Object { ConvertTo-NativeArgument $_ }) -join ' ')
-    $child = [Diagnostics.Process]::Start($start)
-    try { $child.WaitForExit(); $exitCode = $child.ExitCode } finally { $child.Dispose() }
+    # Explicit byte relay; never use PowerShell's text/object pipeline for MCP.
+    . (Join-Path $PSScriptRoot 'stdio-relay.ps1')
+    $arguments = (@($RuntimeArguments | ForEach-Object { ConvertTo-NativeArgument $_ }) -join ' ')
+    $directory = Join-Path (Join-Path $installRoot 'versions') $pin.package_implementation
+    $exitCode = [HapAtlasBootstrap.StdioRelay]::Run($runtimeExe, $arguments, $directory)
     exit $exitCode
 } catch {
     Write-BootstrapStatus $_.Exception.Message
