@@ -55,7 +55,17 @@ $codexPlugin = [ordered]@{
     license = $metadata.license
     keywords = @($metadata.keywords)
     skills = './skills/'
-    mcpServers = './mcp.codex.json'
+    # Codex roots a relative cwd at the installed plugin, but does not expand
+    # plugin-root placeholders in MCP arguments. Inline this client adaptation
+    # so Claude can retain its own supported placeholder in the shared file.
+    mcpServers = [ordered]@{
+        HAPAtlas = [ordered]@{
+            command = $metadata.runtime.command
+            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '.') })
+            cwd = '.'
+            startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
+        }
+    }
     interface = $codexInterface
 }
 Write-JsonFile '.codex-plugin/plugin.json' $codexPlugin
@@ -91,15 +101,6 @@ Write-JsonFile '.mcp.json' ([ordered]@{
             type = 'stdio'
             command = $metadata.runtime.command
             args = @($metadata.runtime.args)
-            startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
-        }
-    }
-})
-Write-JsonFile 'mcp.codex.json' ([ordered]@{
-    mcp_servers = [ordered]@{
-        HAPAtlas = [ordered]@{
-            command = $metadata.runtime.command
-            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '${PLUGIN_ROOT}') })
             startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
         }
     }

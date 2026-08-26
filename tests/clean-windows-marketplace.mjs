@@ -126,6 +126,11 @@ try {
   check('Fresh profile without network fails precisely and never activates a runtime');
   const resolvedMcp = spawnSync(process.execPath, [codexJs,'mcp','get','HAPAtlas','--json'], {encoding:'utf8',windowsHide:true});
   console.log('Client launch declaration:', resolvedMcp.stdout || resolvedMcp.stderr);
+  assert.equal(resolvedMcp.status, 0, resolvedMcp.stderr);
+  const launch = JSON.parse(resolvedMcp.stdout).transport;
+  assert.equal(path.resolve(launch.cwd), path.resolve(installed), 'Client roots launch at the installed plugin, not the user workspace');
+  assert.ok(launch.args.includes('./scripts/runtime-bootstrap.ps1'));
+  check('Client resolves the bootstrap inside its installed plugin without placeholders');
   await app.close();
   app = await appServer();
   const plugin = await app.request('plugin/read', { marketplacePath, pluginName:'hapatlas' });
