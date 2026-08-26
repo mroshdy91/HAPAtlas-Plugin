@@ -13,6 +13,12 @@
         "./scripts/runtime-bootstrap.ps1"
       ],
       "cwd": ".",
+      "env_vars": [
+        "OS",
+        "PROCESSOR_ARCHITECTURE",
+        "PROCESSOR_ARCHITEW6432",
+        "WINDIR"
+      ],
       "startup_timeout_sec": 300
     }
   }

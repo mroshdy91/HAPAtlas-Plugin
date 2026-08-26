@@ -90,6 +90,7 @@ Write-JsonFile '.mcp.json' ([ordered]@{
             command = $metadata.runtime.command
             args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '.') })
             cwd = '.'
+            env_vars = @($metadata.runtime.platform_env_vars)
             startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
         }
     }
@@ -228,6 +229,7 @@ Write-JsonFile 'provenance.json' ([ordered]@{
         unsigned = [bool]$metadata.runtime.unsigned
         command = $metadata.runtime.command
         args = @($metadata.runtime.args)
+        platform_env_vars = @($metadata.runtime.platform_env_vars)
         release_url = $metadata.runtime.release.url
         release_tag = $metadata.runtime.release.tag
         source_commit = $metadata.runtime.release.source_commit

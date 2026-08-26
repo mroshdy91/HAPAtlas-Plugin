@@ -43,6 +43,7 @@
     "command": "powershell.exe",
     "args": ["-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PLUGIN_ROOT}/scripts/runtime-bootstrap.ps1"],
     "startup_timeout_sec": 300,
+    "platform_env_vars": ["OS", "PROCESSOR_ARCHITECTURE", "PROCESSOR_ARCHITEW6432", "WINDIR"],
     "release": {
       "repository": "https://github.com/mroshdy91/HAPAtlas-Plugin",
       "tag": "runtime-v1.0.0-alpha.1-public.1",

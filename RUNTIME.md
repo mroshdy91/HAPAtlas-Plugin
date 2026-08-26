@@ -20,11 +20,20 @@ The [public release](https://github.com/mroshdy91/HAPAtlas-Plugin/releases/tag/r
 
 The client invokes the plugin-owned PowerShell bootstrap from its installed plugin directory. No development path or repository working directory is declared.
 
+Codex's `.mcp.json` uses a plugin-relative working directory and script path;
+the client resolves that directory inside its installed plugin cache. Claude
+and ZCode explicitly reference `mcp.portable.json`, while Gemini and Agent
+Plugins use their own generated root-path variables. All invoke the same
+bootstrap and read the same immutable runtime pin.
+Codex additionally forwards only four non-secret Windows platform variables
+needed by the runtime prerequisite check; it does not inherit credentials or
+the full parent environment.
+
 1. Acquire a per-user bootstrap lock.
 2. Reuse the verified hash-addressed cache, or download the exact pinned inventory and ZIP over HTTPS.
 3. Verify both pinned SHA-256 values, archive paths, every file's size/hash, source identity, and runtime manifest.
 4. Activate through the verified package's `install.ps1 -RuntimeOnly` if the required implementation is not active.
-5. Verify the installed implementation and launch its exact executable with raw MCP stdio.
+5. Verify the installed implementation and stable launcher, then launch through that runtime-owned launcher with raw MCP stdio, preserving its revocation checks.
 
 The installer owns transactional activation and rollback metadata, Companion registration, and the standard per-user PATH entry. No agent configuration is written. A failed download is never activated; an invalid cached bundle is quarantined before a verified replacement is downloaded. Installed-file integrity failures fail closed.
 

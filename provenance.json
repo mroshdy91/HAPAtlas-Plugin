@@ -49,6 +49,12 @@
       "-File",
       "${CLAUDE_PLUGIN_ROOT}/scripts/runtime-bootstrap.ps1"
     ],
+    "platform_env_vars": [
+      "OS",
+      "PROCESSOR_ARCHITECTURE",
+      "PROCESSOR_ARCHITEW6432",
+      "WINDIR"
+    ],
     "release_url": "https://github.com/mroshdy91/HAPAtlas-Plugin/releases/tag/runtime-v1.0.0-alpha.1-public.1",
     "release_tag": "runtime-v1.0.0-alpha.1-public.1",
     "source_commit": "1cc266986128e5e412c367bb702680f7c35f44e0",

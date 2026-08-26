@@ -173,6 +173,12 @@ try {
   }));
   assert.equal(scout.error?.code, 'NO_HAP_SESSION');
   check('Project Scout returns NO_HAP_SESSION');
+  const beforeReinstall = userPath();
+  await app.request('plugin/install', { marketplacePath, pluginName:'hapatlas' });
+  assert.equal(findInstalledPlugin(), installed);
+  assert.equal(active(), pin.package_implementation);
+  assert.equal(userPath(), beforeReinstall);
+  check('Reinstalling the same marketplace pin preserves one plugin and the active runtime');
 } finally { await app.close(); }
 
 const firstPath = userPath();
