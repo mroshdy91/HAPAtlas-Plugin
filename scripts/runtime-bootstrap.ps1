@@ -87,7 +87,8 @@ function Invoke-VerifiedInstaller([string]$Bundle) {
 
 $lock = $null
 try {
-    if ($env:OS -cne 'Windows_NT' -or -not [Environment]::Is64BitOperatingSystem -or -not [Environment]::Is64BitProcess) {
+    if ($env:OS -cne 'Windows_NT' -or -not [Environment]::Is64BitOperatingSystem -or -not [Environment]::Is64BitProcess -or
+        $env:PROCESSOR_ARCHITECTURE -notmatch '^(AMD64|x86_64)$') {
         throw 'BOOTSTRAP_PLATFORM: HAPAtlas requires an x64 Windows agent process. ARM and non-Windows hosts are not supported.'
     }
     $metadata = Get-Content -LiteralPath (Join-Path $PSScriptRoot '..\plugin.metadata.json') -Raw | ConvertFrom-Json
@@ -143,7 +144,8 @@ try {
         Invoke-VerifiedInstaller $bundle
     }
     Assert-HapAtlasInstalledRuntime $installRoot $bundle $pin
-    $runtimeExe = Join-Path (Join-Path (Join-Path $installRoot 'versions') $pin.package_implementation) 'hapatlas.exe'
+    # Preserve the runtime-owned launcher's revocation checks and routing.
+    $runtimeExe = Join-Path $installRoot 'hapatlas.exe'
     $lock.Dispose()
     $lock = $null
     if ($InstallOnly) { Write-BootstrapStatus 'Pinned runtime verified and ready.'; exit 0 }
@@ -152,7 +154,7 @@ try {
     $start.UseShellExecute = $false
     $start.CreateNoWindow = $true
     $start.WindowStyle = [Diagnostics.ProcessWindowStyle]::Hidden
-    $start.WorkingDirectory = [IO.Path]::GetDirectoryName($runtimeExe)
+    $start.WorkingDirectory = Join-Path (Join-Path $installRoot 'versions') $pin.package_implementation
     $start.Arguments = (@($RuntimeArguments | ForEach-Object { ConvertTo-NativeArgument $_ }) -join ' ')
     $child = [Diagnostics.Process]::Start($start)
     try { $child.WaitForExit(); $exitCode = $child.ExitCode } finally { $child.Dispose() }

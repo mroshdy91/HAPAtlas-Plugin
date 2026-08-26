@@ -139,4 +139,9 @@ function Assert-HapAtlasInstalledRuntime([string]$InstallRoot, [string]$Bundle, 
     Assert-HapAtlasHash (Join-Path $root 'package-manifest.json') $Pin.runtime_manifest_sha256
     $manifest = Get-Content -LiteralPath (Join-Path $Bundle 'runtime\package-manifest.json') -Raw | ConvertFrom-Json
     Assert-HapAtlasFileInventory $root $manifest.files @('package-manifest.json')
+    $launcher = Join-Path $InstallRoot 'hapatlas.exe'
+    $expectedLauncher = ($manifest.files | Where-Object path -CEQ 'launcher/hapatlas.exe').sha256
+    try { Assert-HapAtlasHash $launcher $expectedLauncher }
+    catch { throw 'BOOTSTRAP_LAUNCHER_PENDING: The stable launcher is missing, damaged, or awaiting its atomic replacement. Close other HAPAtlas clients, allow Companion to finish the handover, then restart this agent. Do not bypass the launcher.' }
+    Assert-HapAtlasPlainPath (Join-Path $InstallRoot 'revoked-versions.json')
 }
