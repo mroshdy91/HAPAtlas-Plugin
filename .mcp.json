@@ -2,8 +2,17 @@
   "mcpServers": {
     "HAPAtlas": {
       "type": "stdio",
-      "command": "hapatlas",
-      "args": []
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${CLAUDE_PLUGIN_ROOT}/scripts/runtime-bootstrap.ps1"
+      ],
+      "startup_timeout_sec": 300
     }
   }
 }

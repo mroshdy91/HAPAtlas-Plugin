@@ -43,8 +43,8 @@ Use only chapters/actions returned as Available for the selected adapter:
 4. Weather: inspect the visible Design Parameters, exact station selection, then explicit overrides.
 5. Libraries: list/verify trusted sources, search, inspect, compare.
 6. Project Libraries in sidebar order: Schedules, Walls, Roofs, Windows, Doors, Shades, then required Chillers/Boilers and version-correct heat-rejection definitions.
-7. HAP 5.1 direct Spaces when their exact action is advertised; HAP 6.3 reusable Space Types only after their separate definition actions are promoted.
-8. Space Model/zoning for HAP 6.3; later direct Space tabs/surfaces for HAP 5.1 only through separately promoted actions.
+7. HAP 5.1 direct Spaces: General, Internals, Usage/OA, Infiltration and surface tabs, one advertised action at a time; HAP 6.3 reusable Space Types only after their separate definition actions are promoted.
+8. Space Model/zoning for HAP 6.3 through separately promoted nonvisual actions.
 9. Systems and controls.
 10. Plants and exact System connections.
 11. HAP 6.3 Alternatives when applicable.

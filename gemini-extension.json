@@ -1,11 +1,19 @@
 {
   "name": "hapatlas",
-  "version": "1.0.0-alpha.1-private.1",
-  "description": "Workflow-gated HAPAtlas private Alpha control for explicitly selected Carrier HAP projects.",
+  "version": "1.0.0-alpha.1-public.1",
+  "description": "Workflow-gated HAPAtlas Alpha for licensed Carrier HAP, with automatic verified runtime installation.",
   "mcpServers": {
     "HAPAtlas": {
-      "command": "hapatlas",
-      "args": []
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${extensionPath}/scripts/runtime-bootstrap.ps1"
+      ]
     }
   }
 }

@@ -36,7 +36,7 @@ Use the HAP sidebar order: Schedules, constructions/openings/shades, central equ
 
 ## Build consumers
 
-- For HAP 5.1, Scout `spaces` and use only the exact advertised direct Space action. The first acceptance slice owns General name/area/height/optional weight; later load/surface tabs are separate actions.
+- For HAP 5.1, Scout `spaces` and use one advertised direct Space action at a time: General, one Internals group, Usage/OA, Infiltration, one Wall/Roof slot, Floor or one Partition. Read back the exact target before proceeding; reusable definitions remain owned by their library chapters.
 - For HAP 6.3, keep reusable Space Type definition Save separate from explicit Apply to All Space Models. Neither Candidate action may be simulated through another manager.
 - For HAP 6.3, the engineer authors/validates visual Building geometry; HAPAtlas handles only advertised nonvisual Space Model assignments and zoning.
 - For HAP 5.1, use advertised direct Space/surface semantics; do not invent a graphical model.
@@ -50,6 +50,9 @@ Each successor is blocked until the previous native readback passes.
 ## Verify, size and report
 
 1. Project Scout `input-audit`; resolve blocking references, assignments, coverage and stale results.
+   For HAP 5.1, resolve every reported assigned-Space/System ASHRAE 62.1
+   dependency mismatch before starting calculation; never retry Carrier's
+   calculator against unchanged conflicting editions.
 2. Reports `catalog`.
 3. Reports `design.calculate`, then bounded `job.status/wait`.
 4. Project Scout `results` and `verification`.

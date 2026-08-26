@@ -19,6 +19,12 @@ Before starting sizing, verify:
 - no input transaction is pending verification;
 - the caller holds the current revision.
 
+For HAP 5.1, resolve every `STANDARDS_DEPENDENCY_MISMATCH` between an
+edition-specific System ventilation method and its assigned Spaces before
+calculation. Align the visible selections through their owning chapters or
+Carrier's populated Project Preferences workflow, then re-scout and audit.
+Do not retry unchanged conflicting editions or tune OA to force a result.
+
 Plant equipment-reference audit is adapter-specific. HAP 5.1 proves the native
 numeric library category, selected ID, short label, and separately resolved full
 name. HAP 6.3 proves the semantic Chiller/Boiler category, nonzero library ID,
@@ -40,6 +46,10 @@ Treat a calculation as successful only when results exist in HAP's live native i
 
 When a result is nonphysical, unexpectedly high or low, or differs between alternatives or versions, follow [engineering-diagnostics.md](engineering-diagnostics.md). Diagnose the first diverging space/zone/system/plant component and run one justified controlled change; never tune several inputs to force a target total.
 
+A native `Calculated` state proves calculation completion, not engineering
+approval. Retain thermostat/deviation or other native design warnings in the
+handoff; report them separately from input persistence and automation checks.
+
 ## Report boundary
 
 Start with `hapatlas_reports_manage action=catalog`. Use `input.export` when no calculation is wanted, `design.calculate` for sizing only, `design.export-current` for current structured results, or `design.calculate-and-export` when both effects are explicitly requested. Use native Carrier report writers for promoted input reports and preserve PDF/RTF/HTML formatting. Export typed air/plant design results as JSON where private calculated-report renderers are unavailable. Do not present a reconstructed document as a native HAP template.
@@ -50,7 +60,7 @@ Treat each output format as separate evidence. A successful Weather CSV notifica
 
 Treat a HAP 5.1 Error `521` (`Can't open Clipboard`) from `SysReports.PsychAnalysisGraph` / `TERPT323` as a failed System-report graph render even when the report window opens. Reinspect native results and verification to separate renderer contention from project corruption, then retry only the same native report after a short pause. A clean Plant report and structured result JSON are independent evidence; neither makes the affected System report successful. Do not clear the engineer's clipboard or recalculate to work around the renderer.
 
-For HAP 5.1, distinguish evidence from automation. A native input PDF that the engineer generates in HAP can verify persisted inputs, but HAPAtlas must not claim it produced that PDF unless `hapatlas_reports_manage` returns the artifact. The current accepted user-invoked `Space Input Data` report proves one saved/reopened no-opening benchmark; native HAP 5.1 input-report automation remains Candidate.
+For HAP 5.1, distinguish evidence from automation. A native input PDF that the engineer generates in HAP can verify persisted inputs, but HAPAtlas must not claim it produced that PDF unless `hapatlas_reports_manage` returns the artifact. Accepted user-invoked `Space Input Data` reports cover saved/reopened General, Internals, Usage/OA, infiltration and surface fixtures. A field omitted from the native template, such as Direct Exhaust, still requires Scout engineering readback. Native HAP 5.1 input-report automation remains Candidate.
 
 Every artifact should include absolute path, MIME type, byte size, checksum, source session, and revision provenance.
 

@@ -86,11 +86,24 @@ $mcpServer = [ordered]@{
     args = @($metadata.runtime.args)
 }
 Write-JsonFile '.mcp.json' ([ordered]@{
-    mcpServers = [ordered]@{ HAPAtlas = $mcpServer }
+    mcpServers = [ordered]@{
+        HAPAtlas = [ordered]@{
+            type = 'stdio'
+            command = $metadata.runtime.command
+            args = @($metadata.runtime.args)
+            startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
+        }
+    }
 })
 Write-JsonFile 'mcp.json' ([ordered]@{
     '$schema' = 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json'
-    mcpServers = [ordered]@{ hapatlas = $mcpServer }
+    mcpServers = [ordered]@{
+        hapatlas = [ordered]@{
+            type = 'stdio'
+            command = $metadata.runtime.command
+            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '${PLUGIN_ROOT}') })
+        }
+    }
 })
 
 Write-JsonFile 'plugin.json' ([ordered]@{
@@ -112,7 +125,7 @@ Write-JsonFile 'gemini-extension.json' ([ordered]@{
     mcpServers = [ordered]@{
         HAPAtlas = [ordered]@{
             command = $metadata.runtime.command
-            args = @($metadata.runtime.args)
+            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '${extensionPath}') })
         }
     }
 })
@@ -189,7 +202,7 @@ Write-JsonFile 'provenance.json' ([ordered]@{
     plugin_version = $metadata.plugin_version
     plugin_repository = $metadata.repository
     universal_skill = [ordered]@{
-        handoff_source_repository = $metadata.runtime.release.repository
+        handoff_source_repository = $metadata.capability_guidance.source_repository
         handoff_source_commit = $metadata.runtime.release.source_commit
         handoff_source_path = 'plugins/hapatlas/skills/use-hapatlas'
     }
@@ -215,6 +228,11 @@ Write-JsonFile 'provenance.json' ([ordered]@{
         zip_name = $metadata.runtime.release.zip_name
         zip_sha256 = $metadata.runtime.release.zip_sha256
         inventory_name = $metadata.runtime.release.inventory_name
+        inventory_sha256 = $metadata.runtime.release.inventory_sha256
+        runtime_manifest_sha256 = $metadata.runtime.release.runtime_manifest_sha256
+        zip_size = $metadata.runtime.release.zip_size
+        zip_url = $metadata.runtime.release.zip_url
+        inventory_url = $metadata.runtime.release.inventory_url
     }
 })
 

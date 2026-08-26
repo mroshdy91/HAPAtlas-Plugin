@@ -2,17 +2,17 @@
   "schema_version": "1.1",
   "product": "HAPAtlas",
   "product_version": "1.0.0-alpha.1",
-  "plugin_version": "1.0.0-alpha.1-private.1",
+  "plugin_version": "1.0.0-alpha.1-public.1",
   "plugin_repository": "https://github.com/mroshdy91/HAPAtlas-Plugin",
   "universal_skill": {
     "handoff_source_repository": "https://github.com/mroshdy91/HAPAtlas",
-    "handoff_source_commit": "5a48e0f52f48f3bf3e4667a1ec5ee776b32fd563",
+    "handoff_source_commit": "1cc266986128e5e412c367bb702680f7c35f44e0",
     "handoff_source_path": "plugins/hapatlas/skills/use-hapatlas"
   },
   "capability_guidance": {
     "source_repository": "https://github.com/mroshdy91/HAPAtlas",
-    "source_branch": "codex/client-neutral-evaluation",
-    "source_commit": "87d1656cc18e22263c1e2599a3969cf866014d43",
+    "source_branch": "main",
+    "source_commit": "1cc266986128e5e412c367bb702680f7c35f44e0",
     "generated_inventory": "evals/client-neutral/generated-tool-inventory.json",
     "runtime_contracts": [
       "space-workflow-v1",
@@ -21,22 +21,46 @@
     ],
     "accepted_actions": [
       "hapatlas_spaces_manage:general.create",
-      "hapatlas_spaces_manage:general.edit-existing"
+      "hapatlas_spaces_manage:general.edit-existing",
+      "hapatlas_spaces_manage:internals.people.edit-existing",
+      "hapatlas_spaces_manage:internals.overhead-lighting.edit-existing",
+      "hapatlas_spaces_manage:internals.task-lighting.edit-existing",
+      "hapatlas_spaces_manage:internals.electrical-equipment.edit-existing",
+      "hapatlas_spaces_manage:internals.miscellaneous-loads.edit-existing",
+      "hapatlas_spaces_manage:usage-and-outdoor-air.edit-existing",
+      "hapatlas_spaces_manage:infiltration.edit-existing",
+      "hapatlas_spaces_manage:walls-windows-doors.edit-slot",
+      "hapatlas_spaces_manage:roofs-skylights.edit-slot",
+      "hapatlas_spaces_manage:floors.edit-existing",
+      "hapatlas_spaces_manage:partitions.edit-slot"
     ]
   },
   "runtime": {
-    "delivery": "private-external-prerequisite",
+    "delivery": "plugin-first-use-bootstrap",
     "distribution_profile": "public-runtime",
     "unsigned": true,
-    "command": "hapatlas",
-    "args": [],
-    "release_url": "https://github.com/mroshdy91/HAPAtlas/releases/tag/v1.0.0-alpha.1-private.1",
-    "release_tag": "v1.0.0-alpha.1-private.1",
-    "source_commit": "5a48e0f52f48f3bf3e4667a1ec5ee776b32fd563",
-    "development_main_at_handoff": "8d2a24763efb2156b257d147fcb9719daaf9692d",
-    "package_implementation": "1.0.0-alpha.1+pkg.4101efa4e717e9bec65e41ac",
+    "command": "powershell.exe",
+    "args": [
+      "-NoLogo",
+      "-NoProfile",
+      "-NonInteractive",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "${CLAUDE_PLUGIN_ROOT}/scripts/runtime-bootstrap.ps1"
+    ],
+    "release_url": "https://github.com/mroshdy91/HAPAtlas-Plugin/releases/tag/runtime-v1.0.0-alpha.1-public.1",
+    "release_tag": "runtime-v1.0.0-alpha.1-public.1",
+    "source_commit": "1cc266986128e5e412c367bb702680f7c35f44e0",
+    "development_main_at_handoff": "ee2254fd6b03507b012f6ff58e701f968ecd1077",
+    "package_implementation": "1.0.0-alpha.1+pkg.9928919c90935e37c9066f1e",
     "zip_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip",
-    "zip_sha256": "00f22c0daaa46513f4a3a1b39ccae80193c946dbabab1e923b18377075c75dca",
-    "inventory_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip.inventory.json"
+    "zip_sha256": "c8485d81f64b1385c1b72c894eca9db5142c62e12f0a756b74ec8346a01ca3fc",
+    "inventory_name": "HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip.inventory.json",
+    "inventory_sha256": "3c2923d2374fcd6ff9f640909f07b7c42b147e67c9e394bb0de723105d667892",
+    "runtime_manifest_sha256": "9928919c90935e37c9066f1e87e431091befaa839331c6446fb2c8b21b094bf6",
+    "zip_size": 60629387,
+    "zip_url": "https://github.com/mroshdy91/HAPAtlas-Plugin/releases/download/runtime-v1.0.0-alpha.1-public.1/HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip",
+    "inventory_url": "https://github.com/mroshdy91/HAPAtlas-Plugin/releases/download/runtime-v1.0.0-alpha.1-public.1/HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip.inventory.json"
   }
 }

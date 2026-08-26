@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "hapatlas",
-  "version": "1.0.0-alpha.1-private.1",
-  "description": "Workflow-gated HAPAtlas private Alpha control for explicitly selected Carrier HAP projects.",
+  "version": "1.0.0-alpha.1-public.1",
+  "description": "Workflow-gated HAPAtlas Alpha for licensed Carrier HAP, with automatic verified runtime installation.",
   "author": {
     "name": "HAPAtlas",
     "url": "https://github.com/mroshdy91/HAPAtlas-Plugin"

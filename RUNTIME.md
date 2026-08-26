@@ -1,72 +1,60 @@
-# Private runtime prerequisite
+# Pinned public runtime
 
-HAPAtlas Plugin `1.0.0-alpha.1-private.1` requires the separately installed private runtime release below.
+The plugin installs this runtime automatically on first use. A new user should not download or unpack it manually.
 
 | Field | Value |
 |---|---|
-| Release | `v1.0.0-alpha.1-private.1` |
-| Source commit | `5a48e0f52f48f3bf3e4667a1ec5ee776b32fd563` |
-| Distribution profile | `public-runtime` |
-| Package implementation | `1.0.0-alpha.1+pkg.4101efa4e717e9bec65e41ac` |
-| ZIP | `HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip` |
-| ZIP SHA-256 | `00f22c0daaa46513f4a3a1b39ccae80193c946dbabab1e923b18377075c75dca` |
-| Client-neutral capability guidance | `87d1656cc18e22263c1e2599a3969cf866014d43` on `codex/client-neutral-evaluation` |
+| Plugin version | `1.0.0-alpha.1-public.1` |
+| Runtime release | `runtime-v1.0.0-alpha.1-public.1` |
+| Source commit | `1cc266986128e5e412c367bb702680f7c35f44e0` |
+| Distribution | unsigned `public-runtime` |
+| Implementation | `1.0.0-alpha.1+pkg.9928919c90935e37c9066f1e` |
+| ZIP bytes | `60629387` |
+| ZIP SHA-256 | `c8485d81f64b1385c1b72c894eca9db5142c62e12f0a756b74ec8346a01ca3fc` |
+| Inventory SHA-256 | `3c2923d2374fcd6ff9f640909f07b7c42b147e67c9e394bb0de723105d667892` |
+| Runtime manifest SHA-256 | `9928919c90935e37c9066f1e87e431091befaa839331c6446fb2c8b21b094bf6` |
 
-The capability-guidance commit records the generated client-neutral inventory and runtime-contract evidence consumed by the plugin, including Available HAP 5.1 Space General create/edit actions. It does not replace the packaged runtime source commit above. The immutable `private.1` package predates that promotion metadata, so its installed `input-coverage` contract can still report the Space General slice as Candidate; agents must fail closed until a runtime package containing the promoted contract is installed.
+The [public release](https://github.com/mroshdy91/HAPAtlas-Plugin/releases/tag/runtime-v1.0.0-alpha.1-public.1) contains only the compiled runtime ZIP, inventory, and checksum sidecar. Source remains private. The complete 435-file archive passed independent size/hash, manifest, path, forbidden-file, and private-marker checks after a clean detached build with 695 passing tests. Live HAP opt-in tests were not run by the publishing agent.
 
-Authorized testers can download the ZIP, checksum sidecar, and 435-file inventory from the [private HAPAtlas prerelease](https://github.com/mroshdy91/HAPAtlas/releases/tag/v1.0.0-alpha.1-private.1). GitHub authorization for the private repository is required.
+## First connection and later starts
 
-## Verify the download
+The client invokes the plugin-owned PowerShell bootstrap from its installed plugin directory. No development path or repository working directory is declared.
 
-In PowerShell, run:
+1. Acquire a per-user bootstrap lock.
+2. Reuse the verified hash-addressed cache, or download the exact pinned inventory and ZIP over HTTPS.
+3. Verify both pinned SHA-256 values, archive paths, every file's size/hash, source identity, and runtime manifest.
+4. Activate through the verified package's `install.ps1 -RuntimeOnly` if the required implementation is not active.
+5. Verify the installed implementation and launch its exact executable with raw MCP stdio.
 
-```powershell
-(Get-FileHash -Algorithm SHA256 -LiteralPath .\HAPAtlas-1.0.0-alpha.1-windows-unsigned.zip).Hash.ToLowerInvariant()
-```
+The installer owns transactional activation and rollback metadata, Companion registration, and the standard per-user PATH entry. No agent configuration is written. A failed download is never activated; an invalid cached bundle is quarantined before a verified replacement is downloaded. Installed-file integrity failures fail closed.
 
-The result must exactly equal:
+## Cache and updates
+
+Downloads and extracted packages live under:
 
 ```text
-00f22c0daaa46513f4a3a1b39ccae80193c946dbabab1e923b18377075c75dca
+%LOCALAPPDATA%\HAPAtlas\PluginCache\<zip-sha256>\
 ```
 
-Stop if it does not match.
+Installed versions live under:
 
-## Install
-
-Extract the ZIP, open PowerShell in the extracted directory, and run:
-
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-.\install.ps1 -RuntimeOnly
+```text
+%LOCALAPPDATA%\HAPAtlas\bin\versions\<package-implementation>\
 ```
 
-Restart the terminal and agent, then verify:
+A changed plugin runtime pin gets a separate cache and implementation directory. Verified cached packages work offline. Old versions and failed/quarantined download stages are preserved rather than deleted automatically. Close other HAPAtlas clients before changing runtime versions.
 
-```powershell
-hapatlas --version
-hapatlas --doctor
-```
+## Recovery
 
-Only after both commands succeed should the user install the plugin from one marketplace. The runtime installer does not install an agent plugin and does not create a standalone/global MCP entry.
+- **Download failure:** check free disk space, network/proxy access to GitHub and its release-assets host, then restart the agent. No manual ZIP is required.
+- **Missing Microsoft runtime:** follow the installer's specific .NET or Visual C++ prerequisite message, then restart.
+- **Cache integrity failure:** reconnect and restart; the bootstrap preserves the failed cache and downloads a verified copy. Never bypass hashes.
+- **Installed runtime corruption or interrupted activation:** close HAPAtlas clients and follow the installer's transaction-recovery message. The verified cached bundle retains `install.ps1`, `rollback.ps1`, and `uninstall.ps1` for maintainer-guided recovery.
+- **Blocked unsigned executable:** follow your organization's endpoint-security policy; do not disable security controls merely to make a test pass.
+- **No HAP session:** open a licensed exact supported HAP project, then re-scout.
 
-## Roll back or uninstall
+Default runtime uninstall preserves support, recovery, identity, and project-related HAPAtlas state. Purging that data is a separate explicit decision. Removing the plugin does not silently erase runtime or engineer data.
 
-From the extracted release directory:
+## Acceptance scope
 
-```powershell
-.\rollback.ps1 -RuntimeOnly
-.\uninstall.ps1
-```
-
-Default uninstall preserves support, recovery, identity, and other HAPAtlas user data. Permanent removal is a separate confirmed action:
-
-```powershell
-.\uninstall.ps1 -PurgeUserData
-```
-
-## Warning
-
-This runtime is unsigned. Windows SmartScreen or endpoint-security policy may warn or block it, particularly because the exact-build HAP 6.3 adapter loads a managed bridge into the licensed local HAP process. SHA-256 confirms downloaded bytes; it does not establish a verified publisher.
-
-HAPAtlas is independent, unsupported by Carrier, and limited to the exact HAP builds documented above. Carrier software and data are not included.
+Runtime build/audit evidence is separate from plugin installation acceptance. See [the acceptance record](docs/acceptance.md). The marketplace pin must not advance until the matching runtime/plugin pair passes its clean-Windows test.

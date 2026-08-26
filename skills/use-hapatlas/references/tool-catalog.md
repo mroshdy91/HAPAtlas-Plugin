@@ -11,7 +11,7 @@ The visible title mirrors the engineer's HAP path. Lowercase names are protocol 
 | HAPAtlas · View · Preferences · Project | `hapatlas_project_preferences_manage` | verify match, standards impact preview, confirmed migration where adapter permits |
 | HAPAtlas · Weather | `hapatlas_weather_manage` | design station, promoted Design Parameters, HAP 6.3 simulation station |
 | HAPAtlas · Project Libraries · Schedules | `hapatlas_schedules_manage` | custom create, exact-ID edit, exact import |
-| HAPAtlas · Spaces | `hapatlas_spaces_manage` | HAP 5.1 acceptance-stage `general.create` and exact-ID `general.edit-existing` only when the live inventory advertises them |
+| HAPAtlas · Spaces | `hapatlas_spaces_manage` | HAP 5.1 General create/exact-ID edit plus exact-ID People, overhead lighting, task lighting, electrical equipment and miscellaneous-load Internals actions |
 | HAPAtlas · Project Libraries · Space Types | `hapatlas_space_types_manage` | HAP 6.3 Candidate definition create/edit; explicit Apply to All Space Models remains separately guarded |
 | HAPAtlas · Project Libraries · Walls | `hapatlas_walls_manage` | unassigned custom create, exact-ID edit, exact import |
 | HAPAtlas · Project Libraries · Roofs | `hapatlas_roofs_manage` | unassigned custom create, exact-ID edit, exact import |

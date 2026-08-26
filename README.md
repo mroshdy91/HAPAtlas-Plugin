@@ -1,104 +1,71 @@
 # HAPAtlas Plugin
 
-HAPAtlas is the guarded hand of an HVAC engineer's agent inside Carrier HAP. This repository is the public universal plugin for the HAPAtlas private Alpha. It contains one shared workflow skill, shared references, thin client manifests, and an MCP launch declaration. It does not contain the HAPAtlas runtime, private source code, or Carrier software or licensed content.
+HAPAtlas helps an HVAC engineer's agent work inside an explicitly selected, licensed Carrier HAP project. This universal plugin contains one shared workflow skill, thin client manifests, and a verified first-use runtime bootstrap. The HAPAtlas runtime source stays private; Carrier software and data are never included.
 
-## Status and prerequisites
+## Install through Atlas Marketplace
 
-This plugin release is `1.0.0-alpha.1-private.1`. It requires all of the following:
+Add [Atlas Marketplace](https://github.com/mroshdy91/Atlas-Marketplace), install **HAPAtlas**, then restart the agent. On first connection, the plugin downloads its exact public runtime, verifies the archive and complete inventory, installs it per-user, and starts the MCP. No manual runtime ZIP, SDK, repository checkout, or global MCP configuration is required.
 
-- Windows;
-- authorized access to the private [HAPAtlas runtime prerelease](https://github.com/mroshdy91/HAPAtlas/releases/tag/v1.0.0-alpha.1-private.1);
-- a separately installed unsigned HAPAtlas runtime;
-- Carrier HAP 6.3 build `6.03.1378`, payload `6.3.0001`, or Carrier HAP 5.1 build `5.01.0014`, project format `AR002`.
-
-Installing this repository alone installs the skill and MCP declaration, not the runtime. Without the separate runtime, the `hapatlas` MCP command cannot connect. Carrier HAP is a separate licensed prerequisite.
-
-Follow [RUNTIME.md](RUNTIME.md) to verify and install the exact private runtime before adding this plugin.
-
-## Installation
-
-Choose either this product-specific marketplace or the umbrella [Atlas Marketplace](https://github.com/mroshdy91/Atlas-Marketplace). Do not install HAPAtlas from both sources in the same client profile, and do not add a separate standalone/global HAPAtlas MCP entry.
-
-### Codex
+For Codex, add the marketplace using the app's Plugins interface or:
 
 ```text
-codex plugin marketplace add mroshdy91/HAPAtlas-Plugin
+codex plugin marketplace add mroshdy91/Atlas-Marketplace
 ```
 
-Open `/plugins`, select **HAPAtlas**, and install `hapatlas`. Restart Codex or start a new session after installation.
-
-### Claude Code
+Install `hapatlas` from that marketplace and restart Codex. For Claude Code:
 
 ```text
-/plugin marketplace add mroshdy91/HAPAtlas-Plugin
-/plugin install hapatlas@hapatlas-marketplace
+/plugin marketplace add mroshdy91/Atlas-Marketplace
+/plugin install hapatlas@atlas-marketplace
 ```
 
-### ZCode
-
-Open **Settings → Plugins → Create → Add marketplace**, enter:
+ZCode and Copilot clients can use the same marketplace through their plugin installation interface. Gemini CLI can install the pinned plugin repository:
 
 ```text
-https://github.com/mroshdy91/HAPAtlas-Plugin
+gemini extensions install https://github.com/mroshdy91/HAPAtlas-Plugin --ref v1.0.0-alpha.1-public.1
 ```
 
-Install and enable `hapatlas`, then restart or reload the Agent runtime.
+Do not install HAPAtlas from two marketplaces in one client profile, or add a separate HAPAtlas MCP entry. Existing users need to update the plugin and restart; pushing runtime source alone does not update a pinned installation.
 
-### GitHub Copilot CLI
+Client-specific manifests are generated from one source. See [acceptance](docs/acceptance.md) for what has actually been tested; a generated manifest alone is not evidence that a client passed end-to-end acceptance.
 
-```text
-copilot plugin marketplace add mroshdy91/HAPAtlas-Plugin
-copilot plugin install hapatlas@hapatlas-marketplace
-```
+## Requirements
 
-### Gemini CLI
+- Windows x64 with an x64 agent process and Windows PowerShell 5.1 or later.
+- Microsoft .NET 8 Runtime (x64), .NET Framework 4.8, and Visual C++ 2015–2022 Redistributable (x86). No SDK is needed. Missing prerequisites produce an explicit recovery message; the plugin does not silently install elevated system prerequisites.
+- Internet access to GitHub release downloads on first use of a new pinned runtime.
+- For live project work, lawfully licensed HAP 6.3 build `6.03.1378`, payload `6.3.0001`, or HAP 5.1 build `5.01.0014`, format `AR002`.
 
-```text
-gemini extensions install https://github.com/mroshdy91/HAPAtlas-Plugin --ref v1.0.0-alpha.1-private.1
-```
+Without HAP installed/open, MCP tool and static contract discovery should work, and Project Scout should report `NO_HAP_SESSION`. Never infer support for another HAP build.
 
-### Cursor and Agent Plugins clients
+## Runtime boundary
 
-The repository root implements Agent Plugins 1.0 with `plugin.json`, `mcp.json`, and `skills/`. Import this repository through the client's plugin or team-marketplace workflow.
+Plugin version: `1.0.0-alpha.1-public.1`. The exact runtime source, release URLs, hashes, and implementation identity are pinned in [plugin.metadata.json](plugin.metadata.json) and [RUNTIME.md](RUNTIME.md).
 
-## Runtime and MCP boundary
-
-Every client launches the same external runtime through:
-
-```json
-{
-  "command": "hapatlas",
-  "args": []
-}
-```
-
-There is no repository working directory or versioned runtime path. The runtime installer owns command discovery; this plugin owns only the universal skill and client manifests. Detailed schemas and contracts remain discoverable from the running MCP server through `hapatlas_contract_get` and are not duplicated manually here.
+The bootstrap writes progress only to stderr and passes raw MCP streams to the verified runtime. Downloads are cached by archive hash; every reuse verifies the pinned inventory and installed files. Activation uses the runtime's transactional per-user installer, which retains rollback evidence, registers its Companion, and adds the standard HAPAtlas user PATH entry. It never creates an agent plugin or global MCP entry.
 
 ## Safety boundary
 
-HAPAtlas operates only explicitly selected, supported HAP sessions. It revalidates project identity and revision before stateful work, preflights writes on an immutable clone, limits mutations to the requested engineer-visible domain, and leaves Save to the engineer.
+Start with Project Scout, select one exact session, and follow installed contracts and revision gates. Reuse exact native-library definitions before custom inputs. Every engineering write requires the appropriate scope, preflight, and native readback. Only the engineer may Save.
 
-Never infer support for another HAP build. This plugin must not redistribute Carrier binaries, reference data, templates, projects, reports, licensed help content, working sets, or payload files.
+HAP 6.x visual geometry remains engineer-only. The plugin must not redistribute Carrier binaries, reference data, templates, projects, reports, help, working sets, or payloads.
 
-## Unsigned private Alpha
+## Unsigned Alpha
 
-The runtime is an unsigned private Alpha. Windows SmartScreen or endpoint-security software may warn or block it. Its published SHA-256 proves byte identity, not publisher identity. HAPAtlas is an independent hobby project and is not affiliated with, endorsed by, or supported by Carrier.
-
-Compiled .NET runtime assemblies can be inspected or decompiled even though the private source repository, source files, and debug symbols are not distributed.
+This is a free, unsigned evaluation Alpha. Endpoint security may warn or block it; hashes establish byte identity, not a verified publisher. HAPAtlas is independent and is not affiliated with, endorsed by, or supported by Carrier. Compiled .NET assemblies can be inspected or decompiled even though source and debug symbols are not distributed.
 
 ## Runtime privacy
 
-HAPAtlas operates locally with no background upload, analytics, or telemetry. It maintains structurally redacted, project/session-scoped diagnostics under `%LOCALAPPDATA%\HAPAtlas\Support\Sessions`. Support data stays local unless the engineer deliberately sends it to the maintainer. The complete privacy notice is included in the private runtime package.
+The first-use bootstrap contacts GitHub to download the pinned public assets. It sends no HAP project data. Runtime operations and structurally redacted diagnostics remain local, with no background upload, analytics, or telemetry. Support packages stay under `%LOCALAPPDATA%\HAPAtlas\Support\Sessions` unless the engineer deliberately shares one.
 
 ## Alpha use terms
 
-The plugin is proprietary. Runtime evaluation is governed by `HAPATLAS-ALPHA-TERMS.txt` included in the private runtime package. Public visibility permits inspection of this plugin repository but does not publish the private HAPAtlas runtime source or grant open-source rights.
+Runtime use is governed by the finalized `HAPATLAS-ALPHA-TERMS.txt` inside the [public runtime release](https://github.com/mroshdy91/HAPAtlas-Plugin/releases/tag/runtime-v1.0.0-alpha.1-public.1). Licensed HAP is required; cracked or pirated installations are not supported. Public visibility and free evaluation do not grant open-source rights to the proprietary plugin or private runtime source.
 
-## Repository contents
+## Maintaining this repository
 
-- `skills/use-hapatlas/`: the one shared engineer workflow skill and references.
-- `plugin.metadata.json`: canonical public plugin and runtime provenance metadata.
-- `scripts/generate-client-manifests.ps1`: generator for all thin host manifests.
-- `.codex-plugin/`, `.claude-plugin/`, `.zcode-plugin/`, `.github/plugin/`, and root manifests: generated client surfaces.
-- `.mcp.json` and `mcp.json`: generated bare-command MCP declarations.
-- `provenance.json`: generated immutable runtime, skill handoff, and client-neutral capability-guidance provenance.
+- `skills/use-hapatlas/`: shared workflow guidance from the exact runtime handoff.
+- `plugin.metadata.json`: canonical plugin metadata and immutable runtime pin.
+- `scripts/generate-client-manifests.ps1`: generates client surfaces and provenance.
+- `scripts/runtime-bootstrap.ps1` and `runtime-verification.ps1`: first-use installation and integrity checks.
+- `tests/`: bootstrap integrity and clean-Windows marketplace acceptance.

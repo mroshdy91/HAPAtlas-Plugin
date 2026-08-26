@@ -1,0 +1,50 @@
+name: Windows marketplace acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/public-runtime-bootstrap]
+permissions:
+  contents: read
+jobs:
+  clean-windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    env:
+      HAPATLAS_DISPOSABLE_ACCEPTANCE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate bootstrap failure cases on Windows PowerShell 5.1
+        shell: powershell
+        run: .\tests\test-runtime-verification.ps1
+      - name: Install pinned Codex client
+        shell: pwsh
+        run: |
+          npm install --global @openai/codex@0.130.0-alpha.5
+          if ($LASTEXITCODE -ne 0) { throw 'Codex installation failed.' }
+          $moduleRoot = (npm root --global).Trim()
+          "HAPATLAS_CODEX_JS=$moduleRoot\@openai\codex\bin\codex.js" >> $env:GITHUB_ENV
+      - name: Stage the candidate Atlas Marketplace pin without publishing it
+        shell: pwsh
+        run: |
+          $catalogRoot = Join-Path $env:RUNNER_TEMP 'Atlas Marketplace candidate'
+          git clone --depth 1 https://github.com/mroshdy91/Atlas-Marketplace.git $catalogRoot
+          if ($LASTEXITCODE -ne 0) { throw 'Marketplace clone failed.' }
+          $catalogFile = Join-Path $catalogRoot 'catalog.json'
+          $catalog = Get-Content -LiteralPath $catalogFile -Raw | ConvertFrom-Json
+          $metadata = Get-Content -LiteralPath 'plugin.metadata.json' -Raw | ConvertFrom-Json
+          $catalog.catalog_version = $metadata.plugin_version
+          $catalog.plugins[0].ref = $env:GITHUB_SHA
+          $catalog.plugins[0].commit = $env:GITHUB_SHA
+          $catalog.plugins[0].version = $metadata.plugin_version
+          [IO.File]::WriteAllText($catalogFile, ($catalog | ConvertTo-Json -Depth 20))
+          & (Join-Path $catalogRoot 'scripts\generate-marketplaces.ps1')
+          "HAPATLAS_ACCEPTANCE_MARKETPLACE=$catalogRoot" >> $env:GITHUB_ENV
+      - name: Install, restart, discover, and verify pinned runtime without HAP
+        shell: pwsh
+        run: node tests/clean-windows-marketplace.mjs
+      - name: Save acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: clean-windows-acceptance
+          path: artifacts/clean-windows-acceptance.json
+          if-no-files-found: error
