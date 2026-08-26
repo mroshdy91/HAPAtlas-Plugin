@@ -27,7 +27,8 @@ class Rpc {
     this.pending = new Map();
     this.stderr = '';
     this.startupErrors = [];
-    this.process = spawn(command, args, { cwd: os.tmpdir(), windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+    this.process = spawn(command, args, { cwd: os.tmpdir(), windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'],
+      env:{...process.env, RUST_LOG:'codex_core::mcp_connection_manager=debug,codex_rmcp_client=debug,rmcp=debug'} });
     this.process.stderr.on('data', chunk => { this.stderr = (this.stderr + chunk).slice(-12000); });
     createInterface({ input: this.process.stdout }).on('line', line => {
       let frame;
@@ -117,6 +118,14 @@ try {
   await app.request('plugin/install', { marketplacePath, pluginName:'hapatlas' });
   installed = findInstalledPlugin();
   check('Install exactly one plugin through the marketplace service');
+  const offlineFirst = runBootstrap(installed, '-InstallOnly', '-Offline');
+  assert.notEqual(offlineFirst.status, 0);
+  assert.equal(offlineFirst.stdout, '', `Bootstrap must keep stdout clear: ${offlineFirst.stdout}`);
+  assert.match(offlineFirst.stderr, /BOOTSTRAP_OFFLINE/);
+  assert.equal(fs.existsSync(installRoot), false);
+  check('Fresh profile without network fails precisely and never activates a runtime');
+  const resolvedMcp = spawnSync(process.execPath, [codexJs,'mcp','get','HAPAtlas','--json'], {encoding:'utf8',windowsHide:true});
+  console.log('Client launch declaration:', resolvedMcp.stdout || resolvedMcp.stderr);
   await app.close();
   app = await appServer();
   const plugin = await app.request('plugin/read', { marketplacePath, pluginName:'hapatlas' });
