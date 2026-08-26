@@ -116,7 +116,8 @@ try {
   await app.close();
   app = await appServer();
   const plugin = await app.request('plugin/read', { marketplacePath, pluginName:'hapatlas' });
-  assert.ok(plugin.plugin.skills.some(skill => skill.name === 'use-hapatlas'));
+  assert.ok(plugin.plugin.skills.some(skill => ['use-hapatlas','hapatlas:use-hapatlas'].includes(skill.name) && skill.enabled),
+    `Enabled workflow skill expected; skills=${JSON.stringify(plugin.plugin.skills)}`);
   check('Restart discovers use-hapatlas skill');
   const started = await app.request('thread/start', { cwd:os.tmpdir(), ephemeral:true, experimentalRawEvents:false });
   const status = await app.request('mcpServerStatus/list', { limit:100 });
