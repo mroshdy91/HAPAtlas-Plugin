@@ -26,12 +26,16 @@ class Rpc {
     this.next = 1;
     this.pending = new Map();
     this.stderr = '';
+    this.startupErrors = [];
     this.process = spawn(command, args, { cwd: os.tmpdir(), windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
     this.process.stderr.on('data', chunk => { this.stderr = (this.stderr + chunk).slice(-12000); });
     createInterface({ input: this.process.stdout }).on('line', line => {
       let frame;
       try { frame = JSON.parse(line); }
       catch { this.fail(new Error(`Non-JSON stdout: ${line.slice(0,200)}`)); return; }
+      if (frame.method === 'mcpServer/startupStatus/updated' && frame.params?.status === 'failed') {
+        this.startupErrors.push(frame.params);
+      }
       const item = this.pending.get(frame.id);
       if (!item) return;
       clearTimeout(item.timer);
@@ -129,6 +133,7 @@ try {
     status = await app.request('mcpServerStatus/list', { limit:100 });
     hap = status.data.filter(server => Object.values(server.tools).some(tool => tool.name === 'hapatlas_project_scout'));
     if (hap.length > 0) break;
+    assert.equal(app.startupErrors.length, 0, `MCP startup failed: ${JSON.stringify(app.startupErrors)}; ${app.stderr}`);
     await new Promise(resolve => setTimeout(resolve, 2000));
   } while (Date.now() < startupDeadline);
   assert.equal(hap.length, 1, `One loaded HAPAtlas MCP expected; status=${JSON.stringify(status)}; stderr=${app.stderr}`);
