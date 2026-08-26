@@ -17,7 +17,7 @@
     "mcp"
   ],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
+  "mcpServers": "./mcp.codex.json",
   "interface": {
     "displayName": "HAPAtlas",
     "shortDescription": "Build professional Carrier HAP models with agents.",

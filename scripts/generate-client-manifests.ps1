@@ -55,7 +55,7 @@ $codexPlugin = [ordered]@{
     license = $metadata.license
     keywords = @($metadata.keywords)
     skills = './skills/'
-    mcpServers = './.mcp.json'
+    mcpServers = './mcp.codex.json'
     interface = $codexInterface
 }
 Write-JsonFile '.codex-plugin/plugin.json' $codexPlugin
@@ -91,6 +91,15 @@ Write-JsonFile '.mcp.json' ([ordered]@{
             type = 'stdio'
             command = $metadata.runtime.command
             args = @($metadata.runtime.args)
+            startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
+        }
+    }
+})
+Write-JsonFile 'mcp.codex.json' ([ordered]@{
+    mcp_servers = [ordered]@{
+        HAPAtlas = [ordered]@{
+            command = $metadata.runtime.command
+            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '${PLUGIN_ROOT}') })
             startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
         }
     }
