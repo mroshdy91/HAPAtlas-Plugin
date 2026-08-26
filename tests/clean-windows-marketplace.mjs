@@ -120,9 +120,18 @@ try {
     `Enabled workflow skill expected; skills=${JSON.stringify(plugin.plugin.skills)}`);
   check('Restart discovers use-hapatlas skill');
   const started = await app.request('thread/start', { cwd:os.tmpdir(), ephemeral:true, experimentalRawEvents:false });
-  const status = await app.request('mcpServerStatus/list', { limit:100 });
-  const hap = status.data.filter(server => Object.values(server.tools).some(tool => tool.name === 'hapatlas_project_scout'));
-  assert.equal(hap.length, 1, `One loaded HAPAtlas MCP expected; status=${JSON.stringify(status)}`);
+  // Thread creation schedules MCP startup asynchronously; an immediate empty
+  // inventory is not a completed handshake, especially on the first download.
+  const startupDeadline = Date.now() + 330000;
+  let status;
+  let hap;
+  do {
+    status = await app.request('mcpServerStatus/list', { limit:100 });
+    hap = status.data.filter(server => Object.values(server.tools).some(tool => tool.name === 'hapatlas_project_scout'));
+    if (hap.length > 0) break;
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  } while (Date.now() < startupDeadline);
+  assert.equal(hap.length, 1, `One loaded HAPAtlas MCP expected; status=${JSON.stringify(status)}; stderr=${app.stderr}`);
   const server = hap[0];
   const tools = Object.values(server.tools);
   assert.equal(tools.length, 21);
