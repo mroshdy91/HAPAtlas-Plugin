@@ -10,10 +10,8 @@
         "-ExecutionPolicy",
         "Bypass",
         "-File",
-        "./scripts/runtime-bootstrap.ps1"
-      ],
-      "cwd": ".",
-      "startup_timeout_sec": 300
+        "${CLAUDE_PLUGIN_ROOT}/scripts/runtime-bootstrap.ps1"
+      ]
     }
   }
 }

@@ -17,22 +17,7 @@
     "mcp"
   ],
   "skills": "./skills/",
-  "mcpServers": {
-    "HAPAtlas": {
-      "command": "powershell.exe",
-      "args": [
-        "-NoLogo",
-        "-NoProfile",
-        "-NonInteractive",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "./scripts/runtime-bootstrap.ps1"
-      ],
-      "cwd": ".",
-      "startup_timeout_sec": 300
-    }
-  },
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "HAPAtlas",
     "shortDescription": "Build professional Carrier HAP models with agents.",

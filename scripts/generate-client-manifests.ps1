@@ -55,17 +55,7 @@ $codexPlugin = [ordered]@{
     license = $metadata.license
     keywords = @($metadata.keywords)
     skills = './skills/'
-    # Codex roots a relative cwd at the installed plugin, but does not expand
-    # plugin-root placeholders in MCP arguments. Inline this client adaptation
-    # so Claude can retain its own supported placeholder in the shared file.
-    mcpServers = [ordered]@{
-        HAPAtlas = [ordered]@{
-            command = $metadata.runtime.command
-            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '.') })
-            cwd = '.'
-            startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
-        }
-    }
+    mcpServers = './.mcp.json'
     interface = $codexInterface
 }
 Write-JsonFile '.codex-plugin/plugin.json' $codexPlugin
@@ -80,7 +70,7 @@ $portablePlugin = [ordered]@{
     license = $metadata.license
     keywords = @($metadata.keywords)
     skills = './skills/'
-    mcpServers = './.mcp.json'
+    mcpServers = './mcp.portable.json'
 }
 
 $claudePlugin = [ordered]@{ '$schema' = 'https://anthropic.com/claude-code/plugin.schema.json' }
@@ -90,18 +80,26 @@ foreach ($entry in $portablePlugin.GetEnumerator()) {
 Write-JsonFile '.claude-plugin/plugin.json' $claudePlugin
 Write-JsonFile '.zcode-plugin/plugin.json' $portablePlugin
 
-$mcpServer = [ordered]@{
-    type = 'stdio'
-    command = $metadata.runtime.command
-    args = @($metadata.runtime.args)
-}
+# The shipping Codex client accepts a file path, not an inline MCP object.
+# It roots relative cwd at the installed plugin, but does not expand root
+# placeholders in args. Keep that adaptation out of the portable declaration.
 Write-JsonFile '.mcp.json' ([ordered]@{
     mcpServers = [ordered]@{
         HAPAtlas = [ordered]@{
             type = 'stdio'
             command = $metadata.runtime.command
-            args = @($metadata.runtime.args)
+            args = @($metadata.runtime.args | ForEach-Object { $_.Replace('${CLAUDE_PLUGIN_ROOT}', '.') })
+            cwd = '.'
             startup_timeout_sec = [int]$metadata.runtime.startup_timeout_sec
+        }
+    }
+})
+Write-JsonFile 'mcp.portable.json' ([ordered]@{
+    mcpServers = [ordered]@{
+        HAPAtlas = [ordered]@{
+            type = 'stdio'
+            command = $metadata.runtime.command
+            args = @($metadata.runtime.args)
         }
     }
 })
