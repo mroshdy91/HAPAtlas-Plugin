@@ -33,7 +33,7 @@ class Rpc {
     createInterface({ input: this.process.stdout }).on('line', line => {
       let frame;
       try { frame = JSON.parse(line); }
-      catch { this.fail(new Error(`Non-JSON stdout: ${line.slice(0,200)}`)); return; }
+      catch { this.fail(new Error(`Non-JSON stdout: ${line.slice(0,200)}; stderr=${this.stderr}`)); return; }
       if (frame.method === 'mcpServer/startupStatus/updated' && frame.params?.status === 'failed') {
         this.startupErrors.push(frame.params);
       }
@@ -41,7 +41,7 @@ class Rpc {
       if (!item) return;
       clearTimeout(item.timer);
       this.pending.delete(frame.id);
-      if (frame.error) item.reject(new Error(JSON.stringify(frame.error)));
+      if (frame.error) item.reject(new Error(`${JSON.stringify(frame.error)}; stderr=${this.stderr}`));
       else item.resolve(frame.result);
     });
     this.process.on('error', error => this.fail(error));
@@ -179,6 +179,11 @@ try {
   assert.equal(active(), pin.package_implementation);
   assert.equal(userPath(), beforeReinstall);
   check('Reinstalling the same marketplace pin preserves one plugin and the active runtime');
+} catch (error) {
+  console.error('Bootstrap diagnostic stderr:', app.stderr);
+  console.error('Download cache entries:', fs.existsSync(cacheRoot) ? fs.readdirSync(cacheRoot) : []);
+  console.error('Active implementation:', fs.existsSync(path.join(installRoot,'active.txt')) ? active() : 'not installed');
+  throw error;
 } finally { await app.close(); }
 
 const firstPath = userPath();
